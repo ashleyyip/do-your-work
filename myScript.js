@@ -54,38 +54,6 @@ function loadColours() {
 }
 
 
-/*
-function testing() {
-  const proxyurl = "https://cors-anywhere.herokuapp.com/";
-  const url = "http://www.colourlovers.com/api/palettes/random"; // site that doesn’t send Access-Control-*
-  fetch(proxyurl + url) // https://cors-anywhere.herokuapp.com/https://example.com
-  //.then(response => response.text())
-  //.then(contents => console.log(contents))
-
-  .then(function(response) {
-    return response.text();
-  })
-  .then(function(str) {
-    var parser = new window.DOMParser;
-    var doc = parser.parseFromString(str, "text/xml")
-    var relevant = doc.getElementsByTagName("hex")[0].nodeValue;
-    console.log(relevant);
-  })
-
-
-
-
-  .then(str => console.log()
-  xmlDoc.getElementsByTagName("title")[0].childNodes[0].nodeValue;
-
-  .then(function (text) {
-    console.log(text);
-  })
-
-  //.catch(() => console.log("Can’t access " + url + " response. Blocked by browser?"))
-}
-*/
-
 
 // Create a "close" button and append it to each list item
 var myNodelist = document.getElementsByTagName("LI");
@@ -192,7 +160,6 @@ function addToList(input, ul) {
     if (e.keyCode == 13)
     {
       newElement(input, ul);
-      //document.getElementById("monBox").style.backgroundColor = "blue";
       e.preventDefault();
     }
   }, false);
@@ -310,7 +277,7 @@ function newElement(theInput, theUL) {
     testArray = friArray;
     break;
   }
-  console.log(testArray);
+  //console.log(testArray);
   if (testArray === undefined) {
     testArray = [];
   }
