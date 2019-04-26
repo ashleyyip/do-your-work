@@ -4,14 +4,11 @@
   "description": "big oof",
   "manifest_version": 2,
   "author": "Ashley",
-  "icons": {
-    "128": "pikachu.png"
-  },
 
-  
+
+
   "page_action": {
  "default_popup": "popup.html",
- "default_icon": "pikachu.png",
  "default_title": "New Tab"
 },
 

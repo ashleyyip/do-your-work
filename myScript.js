@@ -54,6 +54,42 @@ function loadColours() {
 }
 
 
+document.getElementById("usernameInput").classList.add('appear');
+
+var add = document.getElementById("username");
+add.addEventListener('click', function()
+{
+  var currentText = add.textContent;
+  add.innerHTML = "";
+  document.getElementById("usernameInput").classList.toggle('appear');
+
+  acceptUserInput(add);
+
+
+
+});
+
+//text to nothing
+// add input text form
+// change span text to the input
+// save to storage
+
+
+function acceptUserInput(add) {
+
+  document.addEventListener("click", function(event) {
+    // If user clicks inside the element, do nothing
+    if (!(event.target.closest("#usernameInput"))) {
+      add.innerHTML = document.getElementById("usernameInput").value;
+      document.getElementById("usernameInput").classList.toggle('appear');
+      console.log("woo");
+      return;
+
+    };
+
+  });
+}
+
 
 // Create a "close" button and append it to each list item
 var myNodelist = document.getElementsByTagName("LI");
@@ -249,10 +285,19 @@ var friArray;
 
 // Create a new list item when clicking on the "Add" button or enter key
 function newElement(theInput, theUL) {
+
   var li = document.createElement("li");
   var inputValue = document.getElementById(theInput).value;
   var t = document.createTextNode(inputValue);
-  li.appendChild(t);
+
+  var text = document.createElement("div");
+  text.className = "listText";
+
+  text.appendChild(t);
+
+  li.appendChild(text);
+
+
   if (inputValue !== '')
   {
     document.getElementById(theUL).appendChild(li);
@@ -295,9 +340,14 @@ function newElement(theInput, theUL) {
 
 // display list elements after loading from chrome.storage
 function newElementfromStorage(theUL, inputValue) {
+
   var li = document.createElement("li");
   var t = document.createTextNode(inputValue);
-  li.appendChild(t);
+  var text = document.createElement("div");
+  text.className = "listText";
+  text.appendChild(t);
+  li.appendChild(text);
+
   document.getElementById(theUL).appendChild(li);
 
   var span = document.createElement("SPAN");
