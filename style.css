@@ -61,6 +61,11 @@ input:focus {
   outline: none;
 }
 
+form {
+  position: absolute;
+  bottom: 0;
+}
+
 
 #monBox {
   background-color: #FE4365;
@@ -95,10 +100,10 @@ div {
   flex-direction: column;
   align-items: stretch;
   padding: 0;
+  position: relative;
   min-width: 210px;
   max-width: 210px;
   min-height: 420px;
-  max-height: 420px;
 
 }
 
@@ -117,6 +122,7 @@ ul{
   min-height: 300px;
   color: white;
   max-width: 240px;
+  padding-bottom: 24px;
 
 }
 
@@ -131,6 +137,11 @@ ul li {
 
 ul li.checked {
   text-decoration: line-through;
+}
+
+.listText {
+  margin-right: 10px;
+  word-wrap: break-word;
 }
 
 /* Style the close button */

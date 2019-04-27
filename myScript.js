@@ -252,7 +252,13 @@ function newElement(theInput, theUL) {
   var li = document.createElement("li");
   var inputValue = document.getElementById(theInput).value;
   var t = document.createTextNode(inputValue);
-  li.appendChild(t);
+  var text = document.createElement("div");
+  text.className = "listText";
+
+   text.appendChild(t);
+
+   li.appendChild(text);
+
   if (inputValue !== '')
   {
     document.getElementById(theUL).appendChild(li);
@@ -297,7 +303,12 @@ function newElement(theInput, theUL) {
 function newElementfromStorage(theUL, inputValue) {
   var li = document.createElement("li");
   var t = document.createTextNode(inputValue);
-  li.appendChild(t);
+
+  var text = document.createElement("div");
+  text.className = "listText";
+  text.appendChild(t);
+  li.appendChild(text);
+  
   document.getElementById(theUL).appendChild(li);
 
   var span = document.createElement("SPAN");
