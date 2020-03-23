@@ -1,40 +1,51 @@
+function myList(day) { // essentially the myList class
+ 
+  this.name = day;
+  this.tasks = [];
+  this.strikethrough = [];
+  console.log("created");
+}
+
+var testArray;
+
+var monArray = new myList("mon");
+var tuesArray = new myList("tues");
+var wedArray = new myList("wed");
+var thursArray = new myList("thurs");
+var friArray = new myList("fri");
 
 var inputList = ["monInput", "tuesInput", "wedInput", "thursInput", "friInput"];
 var ulList = ["monUL", "tuesUL", "wedUL", "thursUL", "friUL"];
 //var butList = ["monBut", "tuesBut", "wedBut", "thursBut", "friBut"];
 var boxList = ["monBox", "tuesBox", "wedBox", "thursBox", "friBox"];
 
+
 window.onload = loadTasks;
 
 function loadTasks() {
   chrome.storage.sync.get("monlist", function(data) {
     monArray = data.monlist;
-    console.log("the storage loaded");
-    console.log(data.monlist);
+    console.log("Monday: " + data.monlist);
     reload("monUL", data.monlist); //storing the storage value in a variable and passing to reload function
   });
   chrome.storage.sync.get("tueslist", function(data) {
     tuesArray = data.tueslist;
-    console.log("the storage loaded");
-    console.log(data.tueslist);
+    console.log("Tuesday: " + data.tueslist);
     reload("tuesUL", data.tueslist); //storing the storage value in a variable and passing to reload function
   });
   chrome.storage.sync.get("wedlist", function(data) {
     wedArray = data.wedlist;
-    console.log("the storage loaded");
-    console.log(data.wedlist);
+    console.log("Wednesday: " + data.wedlist);
     reload("wedUL", data.wedlist); //storing the storage value in a variable and passing to reload function
   });
   chrome.storage.sync.get("thurslist", function(data) {
     thursArray = data.thurslist;
-    console.log("the storage loaded");
-    console.log(data.thurslist);
+    console.log("Thursday: " + data.thurslist);
     reload("thursUL", data.thurslist); //storing the storage value in a variable and passing to reload function
   });
   chrome.storage.sync.get("frilist", function(data) {
     friArray = data.frilist;
-    console.log("the storage loaded");
-    console.log(data.frilist);
+    console.log("Friday: " + data.frilist);
     reload("friUL", data.frilist); //storing the storage value in a variable and passing to reload function
   });
 
@@ -48,7 +59,6 @@ function loadColours() {
   for (let i = 0; i < boxList.length; i++) {
     document.getElementById(boxList[i]).style.backgroundColor =
     '#' + colours[randomIndex][i];
-
   }
 
 }
@@ -90,60 +100,6 @@ for (j = 0; j < ulList.length; j++) {
 
 }
 
-// monday's add button is clicked
-/*
-document.addEventListener('DOMContentLoaded', function()
-{
-
-var k;
-for (k = 0; k < butList.length; k++)
-{
-var add = document.getElementById(butList[k]);
-add.addEventListener('click', function()
-{
-newElement("monInput", "monUL");
-});
-}
-
-});
-*/
-
-/*
-document.addEventListener('DOMContentLoaded', function()
-{
-var link = document.getElementById('monInput');
-link.addEventListener('keyCode', function(e) {
-if (e.keyCode === 13)
-{
-e.preventDefault();
-document.getElementById("monBox").style.backgroundColor = "blue";
-
-//  newElement("monInput", "monUL");
-}
-});
-});*/
-
-/*
-var enterList = ["monInput", "tuesInput", "wedInput", "thursInput", "friInput"];
-var k;
-for (k = 0; k < enterList.length; k++)
-{
-document.getElementById(enterList[k]).addEventListener("keydown", function(e)
-{
-if (!e)
-{
-var e = window.event;
-}
-if (e.keyCode == 13)
-{
-newElement("monInput", "monUL");
-//document.getElementById("monBox").style.backgroundColor = "blue";
-e.preventDefault();
-}
-}, false);
-}
-*/
-
 
 for (let i = 0; i < inputList.length; i++) {
   addToList (inputList[i], ulList[i]);
@@ -167,85 +123,7 @@ function addToList(input, ul) {
 }
 
 
-/*
-document.getElementById("monInput").addEventListener("keydown", function(e)
-{
-if (!e)
-{
-var e = window.event;
-}
-if (e.keyCode == 13)
-{
-newElement("monInput", "monUL");
-//document.getElementById("monBox").style.backgroundColor = "blue";
-e.preventDefault();
-}
-}, false);
 
-document.getElementById("tuesInput").addEventListener("keydown", function(e)
-{
-if (!e)
-{
-var e = window.event;
-}
-if (e.keyCode == 13)
-{
-newElement("tuesInput", "tuesUL");
-//document.getElementById("monBox").style.backgroundColor = "blue";
-e.preventDefault();
-}
-}, false);
-
-document.getElementById("wedInput").addEventListener("keydown", function(e)
-{
-if (!e)
-{
-var e = window.event;
-}
-if (e.keyCode == 13)
-{
-newElement("wedInput", "wedUL");
-//document.getElementById("monBox").style.backgroundColor = "blue";
-e.preventDefault();
-}
-}, false);
-
-document.getElementById("thursInput").addEventListener("keydown", function(e)
-{
-if (!e)
-{
-var e = window.event;
-}
-if (e.keyCode == 13)
-{
-newElement("thursInput", "thursUL");
-//document.getElementById("monBox").style.backgroundColor = "blue";
-e.preventDefault();
-}
-}, false);
-
-document.getElementById("friInput").addEventListener("keydown", function(e)
-{
-if (!e)
-{
-var e = window.event;
-}
-if (e.keyCode == 13)
-{
-newElement("friInput", "friUL");
-//document.getElementById("monBox").style.backgroundColor = "blue";
-e.preventDefault();
-}
-}, false);
-*/
-
-var testArray;
-
-var monArray;
-var tuesArray;
-var wedArray;
-var thursArray;
-var friArray;
 
 // Create a new list item when clicking on the "Add" button or enter key
 function newElement(theInput, theUL) {
@@ -373,7 +251,7 @@ function checkIfClose() {
 
 
 function reload(theUL, previousToDos) {
-  console.log(theUL);
+  // console.log(theUL);
   for (let i = 0; i < previousToDos.length; i++) {
     newElementfromStorage(theUL, previousToDos[i]);
   }
@@ -449,18 +327,4 @@ function updateRemove(array, thingToRemove, theUL) {
   }
 
 }
-/*
-window.onload = loadToDos;
 
-function loadToDos()
-{
-chrome.storage.sync.get("list", function(data)
-{
-testArray = data.list;
-console.log("the storage loaded");
-console.log(data.list);
-reload("MonUL", data.list); //storing the storage value in a variable and passing to reload function
-});
-
-}
-*/
