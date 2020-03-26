@@ -1,5 +1,3 @@
-var testArray;
-
 var monArray;
 var tuesArray;
 var wedArray;
@@ -7,9 +5,7 @@ var thursArray;
 var friArray;
 
 var allLists = [monArray, tuesArray, wedArray, thursArray, friArray];
-var inputList = ["monInput", "tuesInput", "wedInput", "thursInput", "friInput"]; // put into the todolist class
 //var butList = ["monBut", "tuesBut", "wedBut", "thursBut", "friBut"];
-var boxList = ["monBox", "tuesBox", "wedBox", "thursBox", "friBox"]; // also put into todolist class
 
 window.onload = loadTasks;
 
@@ -49,22 +45,22 @@ function loadTasks() {
 
 for (let i = 0; i < allLists.length; i++) {
   if (monArray == undefined) {
-    monArray = new ToDoList("monUL");
-    tuesArray = new ToDoList("tuesUL");
-    wedArray = new ToDoList("wedUL");
-    thursArray = new ToDoList("thursUL");
-    friArray = new ToDoList("friUL");
+    monArray = new ToDoList("mon");
+    tuesArray = new ToDoList("tues");
+    wedArray = new ToDoList("wed");
+    thursArray = new ToDoList("thurs");
+    friArray = new ToDoList("fri");
   }
 
-  addToList (inputList[i], allLists[i]); // allLists is an array of ToDoList classes
+  addToList(allLists[i]); // allLists is an array of ToDoList classes
 }
 
 function loadColours() {
   var max = colours.length;
   // generate random palette
   var randomIndex = Math.floor(Math.random() * (max + 1));
-  for (let i = 0; i < boxList.length; i++) {
-    document.getElementById(boxList[i]).style.backgroundColor =
+  for (let i = 0; i < allLists.length; i++) {
+    document.getElementById(allLists[i].boxID).style.backgroundColor =
     '#' + colours[randomIndex][i];
   }
 
@@ -106,11 +102,11 @@ for (let i = 0; i < close.length; i++) {
 // }
 
 // add input text to the to-do list
-function addToList(input, dayOfWeekToDoList) {
+function addToList(dayOfWeekToDoList) {
 
   console.log("addToList");
   try {
-    document.getElementById(input).addEventListener("keydown", function(e) // fix if null
+    document.getElementById(dayOfWeekToDoList.inputID).addEventListener("keydown", function(e) // fix if null
     {
       if (!e)
       {
@@ -118,7 +114,7 @@ function addToList(input, dayOfWeekToDoList) {
       }
       if (e.keyCode == 13)
       {
-        newElement(input, dayOfWeekToDoList);
+        newElement(dayOfWeekToDoList);
         e.preventDefault();
       }
     }, false);
@@ -130,9 +126,9 @@ function addToList(input, dayOfWeekToDoList) {
 
 
 // Create a new list item when clicking on the enter key
-function newElement(theInput, dayOfWeekToDoList) {
+function newElement(dayOfWeekToDoList) {
   var li = document.createElement("li");
-  var inputValue = document.getElementById(theInput).value;
+  var inputValue = document.getElementById(dayOfWeekToDoList.inputID).value;
   var t = document.createTextNode(inputValue);
   var text = document.createElement("div");
   text.className = "listText";
@@ -154,7 +150,7 @@ function newElement(theInput, dayOfWeekToDoList) {
     }
     
   }
-  document.getElementById(theInput).value = "";
+  document.getElementById(dayOfWeekToDoList.inputID).value = "";
 
   updateAdd(dayOfWeekToDoList.tasks, dayOfWeekToDoList.name);
 
@@ -198,31 +194,32 @@ function checkIfClose() {
       div.style.display = "none";
       var thingToRemove = div.textContent.substring(0, div.textContent.length-1);
       var dayID = div.parentElement.id;
+      var dayArray;
       switch (dayID) {
         case "monUL":        
-        testArray = monArray;
+        dayArray = monArray;
         break;
         case "tuesUL":
-        testArray = tuesArray;
+        dayArray = tuesArray;
         break;
         case "wedUL":
-        testArray = wedArray;
+        dayArray = wedArray;
         break;
         case "thursUL":
-        testArray = thursArray;
+        dayArray = thursArray;
         break;
         case "friUL":
-        testArray = friArray;
+        dayArray = friArray;
         break;
       }
 
-      for (let i = 0; i < testArray.tasks.length; i++){
-        if (testArray.tasks[i].taskDescription === thingToRemove) {
-          testArray.tasks.splice(i, 1);
+      for (let i = 0; i < dayArray.tasks.length; i++){
+        if (dayArray.tasks[i].taskDescription === thingToRemove) {
+          dayArray.tasks.splice(i, 1);
         }
       }
 
-      updateAdd(testArray.tasks, dayID);
+      updateAdd(dayArray.tasks, dayID);
       
     }
   }
@@ -245,29 +242,19 @@ function updateAdd(array, key) {
   // });
   switch (key) {
     case "monUL":
-    chrome.storage.sync.set({"monlist": array}, function() {
-      console.log(array);
-    });
+    chrome.storage.sync.set({"monlist": array}, function() {});
     break;
     case "tuesUL":
-    chrome.storage.sync.set({"tueslist": array}, function() {
-      console.log(array);
-    });
+    chrome.storage.sync.set({"tueslist": array}, function() {});
     break;
     case "wedUL":
-    chrome.storage.sync.set({"wedlist": array}, function() {
-      console.log(array);
-    });
+    chrome.storage.sync.set({"wedlist": array}, function() {});
     break;
     case "thursUL":
-    chrome.storage.sync.set({"thurslist": array}, function() {
-      console.log(array);
-    });
+    chrome.storage.sync.set({"thurslist": array}, function() {});
     break;
     case "friUL":
-    chrome.storage.sync.set({"frilist": array}, function() {
-      console.log(array);
-    });
+    chrome.storage.sync.set({"frilist": array}, function() {});
   }
 
   console.log("stored " + array + " in " + key);
