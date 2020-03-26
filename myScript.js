@@ -213,7 +213,7 @@ function checkIfClose() {
       //console.log(this.parentElement.textContent);
       var div = this.parentElement;
       div.style.display = "none";
-      var text = div.textContent;
+      var thingToRemove = div.textContent.substring(0, div.textContent.length-1);
       var dayID = div.parentElement.id;
       switch (dayID) {
         case "monUL":        
@@ -234,18 +234,14 @@ function checkIfClose() {
       }
 
       for (let i = 0; i < testArray.tasks.length; i++){
-        if (testArray.tasks[i] === thingToRemove) {
+        if (testArray.tasks[i].taskDescription === thingToRemove) {
           testArray.tasks.splice(i, 1);
         }
       }
 
       updateAdd(testArray.tasks, dayID);
-
-      // remove element from list
-      // store elements in chrome storage
-      // updateRemove(testArray, text.substring(0, text.length-1), dayID);
+      
     }
-
   }
 }
 
@@ -254,7 +250,7 @@ function reload(theUL, previousToDos) {
   console.log(theUL);
   if (previousToDos != undefined) {
     for (let i = 0; i < previousToDos.length; i++) {
-      newElementfromStorage(theUL, previousToDos[i]);
+      newElementfromStorage(theUL, previousToDos[i].taskDescription);
     }
   }
 }
