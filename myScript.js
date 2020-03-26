@@ -1,30 +1,24 @@
-function myList(day) { // essentially the myList class
- 
-  this.name = day;
-  this.tasks = [];
-  this.strikethrough = [];
-  console.log("created");
-}
-
 var testArray;
 
-var monArray = new myList("mon");
-var tuesArray = new myList("tues");
-var wedArray = new myList("wed");
-var thursArray = new myList("thurs");
-var friArray = new myList("fri");
+var monArray;
+var tuesArray;
+var wedArray;
+var thursArray;
+var friArray;
 
-var inputList = ["monInput", "tuesInput", "wedInput", "thursInput", "friInput"];
-var ulList = ["monUL", "tuesUL", "wedUL", "thursUL", "friUL"];
+var allLists = [monArray, tuesArray, wedArray, thursArray, friArray];
+var inputList = ["monInput", "tuesInput", "wedInput", "thursInput", "friInput"]; // put into the todolist class
 //var butList = ["monBut", "tuesBut", "wedBut", "thursBut", "friBut"];
-var boxList = ["monBox", "tuesBox", "wedBox", "thursBox", "friBox"];
-
+var boxList = ["monBox", "tuesBox", "wedBox", "thursBox", "friBox"]; // also put into todolist class
 
 window.onload = loadTasks;
 
 function loadTasks() {
+  
+  console.log(monArray.name);
+
   chrome.storage.sync.get("monlist", function(data) {
-    monArray = data.monlist;
+    monArray.tasks = data.monlist;
     console.log("Monday: " + data.monlist);
     reload("monUL", data.monlist); //storing the storage value in a variable and passing to reload function
   });
@@ -50,6 +44,19 @@ function loadTasks() {
   });
 
   loadColours();
+
+}
+
+for (let i = 0; i < allLists.length; i++) {
+  if (monArray == undefined) {
+    monArray = new ToDoList("monUL");
+    tuesArray = new ToDoList("tuesUL");
+    wedArray = new ToDoList("wedUL");
+    thursArray = new ToDoList("thursUL");
+    friArray = new ToDoList("friUL");
+  }
+
+  addToList (inputList[i], allLists[i]); // allLists is an array of ToDoList classes
 }
 
 function loadColours() {
@@ -62,8 +69,6 @@ function loadColours() {
   }
 
 }
-
-
 
 // Create a "close" button and append it to each list item
 var myNodelist = document.getElementsByTagName("LI");
@@ -85,88 +90,73 @@ for (let i = 0; i < close.length; i++) {
 }
 
 // strikethrough the text when list item is clicked
-var j;
-for (j = 0; j < ulList.length; j++) {
-  var day = document.getElementById(ulList[j]);
-  console.log(day);
-  if (day !== null) {
-    day.addEventListener('click', function(ev) {
-      if (ev.target.tagName === 'LI') {
-        ev.target.classList.toggle('checked');
-      }
-    }, false);
+// var j;
+// for (j = 0; j < ulList.length; j++) {
+//   var day = document.getElementById(ulList[j]);
+//   console.log(day);
+//   if (day !== null) {
+//     day.addEventListener('click', function(ev) {
+//       if (ev.target.tagName === 'LI') {
+//         ev.target.classList.toggle('checked');
+//       }
+//     }, false);
 
-  }
+//   }
 
-}
-
-
-for (let i = 0; i < inputList.length; i++) {
-  addToList (inputList[i], ulList[i]);
-}
+// }
 
 // add input text to the to-do list
-function addToList(input, ul) {
-  document.getElementById(input).addEventListener("keydown", function(e)
-  {
-    if (!e)
-    {
-      var e = window.event;
-    }
-    if (e.keyCode == 13)
-    {
-      newElement(input, ul);
-      e.preventDefault();
-    }
-  }, false);
+function addToList(input, dayOfWeekToDoList) {
 
+  console.log("addToList");
+  try {
+    document.getElementById(input).addEventListener("keydown", function(e) // fix if null
+    {
+      if (!e)
+      {
+        var e = window.event;
+      }
+      if (e.keyCode == 13)
+      {
+        newElement(input, dayOfWeekToDoList);
+        e.preventDefault();
+      }
+    }, false);
+    
+  } catch (error) {
+    // console.log(error);
+  }
 }
 
 
-
-
-// Create a new list item when clicking on the "Add" button or enter key
-function newElement(theInput, theUL) {
+// Create a new list item when clicking on the enter key
+function newElement(theInput, dayOfWeekToDoList) {
   var li = document.createElement("li");
   var inputValue = document.getElementById(theInput).value;
   var t = document.createTextNode(inputValue);
   var text = document.createElement("div");
   text.className = "listText";
+  text.appendChild(t);
+  li.appendChild(text);
 
-   text.appendChild(t);
-
-   li.appendChild(text);
+  var task = new Task(inputValue);
 
   if (inputValue !== '')
   {
-    document.getElementById(theUL).appendChild(li);
+    console.log(dayOfWeekToDoList.name);
+    document.getElementById(dayOfWeekToDoList.name).appendChild(li);
+    
+    if (dayOfWeekToDoList.tasks != undefined) {
+      dayOfWeekToDoList.tasks.push(task);
+    }
+    else {
+      dayOfWeekToDoList.tasks = [task];
+    }
+    
   }
   document.getElementById(theInput).value = "";
 
-  switch (theUL)
-  {
-    case "monUL":
-    testArray = monArray;
-    break;
-    case "tuesUL":
-    testArray = tuesArray;
-    break;
-    case "wedUL":
-    testArray = wedArray;
-    break;
-    case "thursUL":
-    testArray = thursArray;
-    break;
-    case "friUL":
-    testArray = friArray;
-    break;
-  }
-  //console.log(testArray);
-  if (testArray === undefined) {
-    testArray = [];
-  }
-  console.log(theUL);
-  updateAdd(testArray, inputValue, theUL);
+  updateAdd(dayOfWeekToDoList.tasks, dayOfWeekToDoList.name);
 
   var span = document.createElement("SPAN");
   var txt = document.createTextNode("\u00D7");
@@ -194,24 +184,24 @@ function newElementfromStorage(theUL, inputValue) {
   span.className = "close";
   span.appendChild(txt);
   li.appendChild(span);
-  switch (theUL) {
-    case "monUL":
-    testArray = monArray;
-    break;
-    case "tuesUL":
-    testArray = tuesArray;
-    break;
-    case "wedUL":
-    testArray = wedArray;
-    break;
-    case "thursUL":
-    testArray = thursArray;
-    break;
-    case "friUL":
-    testArray = friArray;
-    break;
+  // switch (theUL) {
+  //   case "monUL":
+  //   testArray = monArray;
+  //   break;
+  //   case "tuesUL":
+  //   testArray = tuesArray;
+  //   break;
+  //   case "wedUL":
+  //   testArray = wedArray;
+  //   break;
+  //   case "thursUL":
+  //   testArray = thursArray;
+  //   break;
+  //   case "friUL":
+  //   testArray = friArray;
+  //   break;
 
-  }
+  // }
   checkIfClose();
 }
 
@@ -226,7 +216,7 @@ function checkIfClose() {
       var text = div.textContent;
       var dayID = div.parentElement.id;
       switch (dayID) {
-        case "monUL":
+        case "monUL":        
         testArray = monArray;
         break;
         case "tuesUL":
@@ -243,7 +233,17 @@ function checkIfClose() {
         break;
       }
 
-      updateRemove(testArray, text.substring(0, text.length-1), dayID);
+      for (let i = 0; i < testArray.tasks.length; i++){
+        if (testArray.tasks[i] === thingToRemove) {
+          testArray.tasks.splice(i, 1);
+        }
+      }
+
+      updateAdd(testArray.tasks, dayID);
+
+      // remove element from list
+      // store elements in chrome storage
+      // updateRemove(testArray, text.substring(0, text.length-1), dayID);
     }
 
   }
@@ -251,16 +251,17 @@ function checkIfClose() {
 
 
 function reload(theUL, previousToDos) {
-  // console.log(theUL);
-  for (let i = 0; i < previousToDos.length; i++) {
-    newElementfromStorage(theUL, previousToDos[i]);
+  console.log(theUL);
+  if (previousToDos != undefined) {
+    for (let i = 0; i < previousToDos.length; i++) {
+      newElementfromStorage(theUL, previousToDos[i]);
+    }
   }
 }
 
 // updates the array that gets put in storage when new list item is added
-function updateAdd(array, thingToAdd, theUL) {
-  array.push(thingToAdd);
-  switch (theUL) {
+function updateAdd(array, key) {
+  switch (key) {
     case "monUL":
     chrome.storage.sync.set({"monlist": array}, function() {
       console.log(array);
