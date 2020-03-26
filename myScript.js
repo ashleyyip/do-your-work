@@ -19,26 +19,26 @@ function loadTasks() {
 
   chrome.storage.sync.get("monlist", function(data) {
     monArray.tasks = data.monlist;
-    console.log("Monday: " + data.monlist);
+    console.log("Monday loading storage: " + data.monlist);
     reload("monUL", data.monlist); //storing the storage value in a variable and passing to reload function
   });
   chrome.storage.sync.get("tueslist", function(data) {
-    tuesArray = data.tueslist;
+    tuesArray.tasks = data.tueslist;
     console.log("Tuesday: " + data.tueslist);
     reload("tuesUL", data.tueslist); //storing the storage value in a variable and passing to reload function
   });
   chrome.storage.sync.get("wedlist", function(data) {
-    wedArray = data.wedlist;
+    wedArray.tasks = data.wedlist;
     console.log("Wednesday: " + data.wedlist);
     reload("wedUL", data.wedlist); //storing the storage value in a variable and passing to reload function
   });
   chrome.storage.sync.get("thurslist", function(data) {
-    thursArray = data.thurslist;
+    thursArray.tasks = data.thurslist;
     console.log("Thursday: " + data.thurslist);
     reload("thursUL", data.thurslist); //storing the storage value in a variable and passing to reload function
   });
   chrome.storage.sync.get("frilist", function(data) {
-    friArray = data.frilist;
+    friArray.tasks = data.frilist;
     console.log("Friday: " + data.frilist);
     reload("friUL", data.frilist); //storing the storage value in a variable and passing to reload function
   });
@@ -184,24 +184,7 @@ function newElementfromStorage(theUL, inputValue) {
   span.className = "close";
   span.appendChild(txt);
   li.appendChild(span);
-  // switch (theUL) {
-  //   case "monUL":
-  //   testArray = monArray;
-  //   break;
-  //   case "tuesUL":
-  //   testArray = tuesArray;
-  //   break;
-  //   case "wedUL":
-  //   testArray = wedArray;
-  //   break;
-  //   case "thursUL":
-  //   testArray = thursArray;
-  //   break;
-  //   case "friUL":
-  //   testArray = friArray;
-  //   break;
 
-  // }
   checkIfClose();
 }
 
@@ -257,6 +240,9 @@ function reload(theUL, previousToDos) {
 
 // updates the array that gets put in storage when new list item is added
 function updateAdd(array, key) {
+  // chrome.storage.sync.set({key: array}, function() {
+  //   console.log(array);
+  // });
   switch (key) {
     case "monUL":
     chrome.storage.sync.set({"monlist": array}, function() {
@@ -283,45 +269,10 @@ function updateAdd(array, key) {
       console.log(array);
     });
   }
+
+  console.log("stored " + array + " in " + key);
   //then call the set to update with modified value
 
 }
 
-// updates the array in storage when current list item is removed
-function updateRemove(array, thingToRemove, theUL) {
-  console.log(thingToRemove);
-  for (let i = 0; i < array.length; i++){
-    if (array[i] === thingToRemove) {
-      array.splice(i, 1);
-    }
-  }
-  switch (theUL) {
-    case "monUL":
-    chrome.storage.sync.set({"monlist": array}, function() {
-      console.log(array);
-    });
-    break;
-    case "tuesUL":
-    chrome.storage.sync.set({"tueslist": array}, function() {
-      console.log(array);
-    });
-    break;
-    case "wedUL":
-    chrome.storage.sync.set({"wedlist": array}, function() {
-      console.log(array);
-    });
-    break;
-    case "thursUL":
-    chrome.storage.sync.set({"thurslist": array}, function() {
-      console.log(array);
-    });
-    break;
-    case "friUL":
-    chrome.storage.sync.set({"frilist": array}, function() {
-      console.log(array);
-    });
-    break;
-  }
-
-}
 
