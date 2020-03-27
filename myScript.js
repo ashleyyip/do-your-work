@@ -5,7 +5,6 @@ var thursArray;
 var friArray;
 
 var allLists = [monArray, tuesArray, wedArray, thursArray, friArray];
-//var butList = ["monBut", "tuesBut", "wedBut", "thursBut", "friBut"];
 
 window.onload = loadTasks;
 
@@ -76,30 +75,43 @@ for (let i = 0; i < myNodelist.length; i++) {
   myNodelist[i].appendChild(span);
 }
 
-// Click on a close button to hide the current list item
-var close = document.getElementsByClassName("close");
-for (let i = 0; i < close.length; i++) {
-  close[i].onclick = function() {
-    var div = this.parentElement;
-    div.style.display = "none";
-  }
-}
 
 // strikethrough the text when list item is clicked
-// var j;
-// for (j = 0; j < ulList.length; j++) {
-//   var day = document.getElementById(ulList[j]);
-//   console.log(day);
-//   if (day !== null) {
-//     day.addEventListener('click', function(ev) {
-//       if (ev.target.tagName === 'LI') {
-//         ev.target.classList.toggle('checked');
-//       }
-//     }, false);
+function strikethroughTask() {
+  var tasks = document.getElementsByClassName("listText");
+  for (let i = 0; i < tasks.length; i++) {
+    tasks[i].onclick = function() {
+      tasks[i].parentElement.classList.toggle('checked');
+      var dayID = this.parentElement.parentElement.id;
+      var dayArray;
+      switch (dayID) {
+        case "monUL":        
+        dayArray = monArray;
+        break;
+        case "tuesUL":
+        dayArray = tuesArray;
+        break;
+        case "wedUL":
+        dayArray = wedArray;
+        break;
+        case "thursUL":
+        dayArray = thursArray;
+        break;
+        case "friUL":
+        dayArray = friArray;
+        break;
+      }
+      for (let i = 0; i < dayArray.tasks.length; i++){
+        if (dayArray.tasks[i].taskDescription === this.textContent) { 
+          dayArray.tasks[i].strikethrough = !(dayArray.tasks[i].strikethrough);
+        }
+      }
 
-//   }
+      updateAdd(dayArray.tasks, dayID);
 
-// }
+    }
+  }
+}
 
 // add input text to the to-do list
 function addToList(dayOfWeekToDoList) {
@@ -124,7 +136,6 @@ function addToList(dayOfWeekToDoList) {
   }
 }
 
-
 // Create a new list item when clicking on the enter key
 function newElement(dayOfWeekToDoList) {
   var li = document.createElement("li");
@@ -148,7 +159,6 @@ function newElement(dayOfWeekToDoList) {
     else {
       dayOfWeekToDoList.tasks = [task];
     }
-    
   }
   document.getElementById(dayOfWeekToDoList.inputID).value = "";
 
@@ -160,13 +170,14 @@ function newElement(dayOfWeekToDoList) {
   span.appendChild(txt);
   li.appendChild(span);
 
+  strikethroughTask();
   checkIfClose();
 }
 
 // display list elements after loading from chrome.storage
-function newElementfromStorage(theUL, inputValue) {
+function newElementfromStorage(theUL, inputTask) {
   var li = document.createElement("li");
-  var t = document.createTextNode(inputValue);
+  var t = document.createTextNode(inputTask.taskDescription);
 
   var text = document.createElement("div");
   text.className = "listText";
@@ -181,15 +192,19 @@ function newElementfromStorage(theUL, inputValue) {
   span.appendChild(txt);
   li.appendChild(span);
 
+  if (inputTask.strikethrough) {
+    li.classList.toggle('checked');
+  }
+
+  strikethroughTask();
   checkIfClose();
 }
 
 // checks if the x button is clicked on a list item
 function checkIfClose() {
+  var close = document.getElementsByClassName("close");
   for (let i = 0; i < close.length; i++) {
     close[i].onclick = function() {
-      //console.log(this.parentElement.parentElement.id);
-      //console.log(this.parentElement.textContent);
       var div = this.parentElement;
       div.style.display = "none";
       var thingToRemove = div.textContent.substring(0, div.textContent.length-1);
@@ -225,12 +240,11 @@ function checkIfClose() {
   }
 }
 
-
 function reload(theUL, previousToDos) {
   console.log(theUL);
   if (previousToDos != undefined) {
     for (let i = 0; i < previousToDos.length; i++) {
-      newElementfromStorage(theUL, previousToDos[i].taskDescription);
+      newElementfromStorage(theUL, previousToDos[i]);
     }
   }
 }
