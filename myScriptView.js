@@ -1,3 +1,4 @@
+// loads background colours for each of the to-do lists
 function loadColours() {
     var max = colours.length;
     // generate random palette
@@ -21,9 +22,9 @@ function generateCloseButton() {
     }
 }
 
+// Generate new element with the new task and adds it to the list
 function newElementView(dayOfWeekToDoList) {
     var inputValue = document.getElementById(dayOfWeekToDoList.inputID).value;
-
     var li = document.createElement("li");
     var t = document.createTextNode(inputValue);
     var text = document.createElement("div");
@@ -31,23 +32,23 @@ function newElementView(dayOfWeekToDoList) {
     text.appendChild(t);
     li.appendChild(text);
 
-    if (inputValue !== '') {
+    if (inputValue !== '') { 
         document.getElementById(dayOfWeekToDoList.name).appendChild(li);
     }
 
-    document.getElementById(dayOfWeekToDoList.inputID).value = "";
+    document.getElementById(dayOfWeekToDoList.inputID).value = ""; // reset the input text back to blank
     var span = document.createElement("SPAN");
-    var txt = document.createTextNode("\u00D7");
+    var txt = document.createTextNode("\u00D7"); // add the "close" symbol to the end of the task
     span.className = "close";
     span.appendChild(txt);
     li.appendChild(span);
 }
 
+// Generate the HTML elements for all the tasks loaded from chrome.storage
 function newElementfromStorageView(theUL, inputTask) {
 
     var li = document.createElement("li");
     var t = document.createTextNode(inputTask.taskDescription);
-  
     var text = document.createElement("div");
     text.className = "listText";
     text.appendChild(t);
@@ -56,7 +57,7 @@ function newElementfromStorageView(theUL, inputTask) {
     document.getElementById(theUL).appendChild(li);
   
     var span = document.createElement("SPAN");
-    var txt = document.createTextNode("\u00D7");
+    var txt = document.createTextNode("\u00D7"); // add close symbol
     span.className = "close";
     span.appendChild(txt);
     li.appendChild(span);
