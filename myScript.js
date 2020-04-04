@@ -9,8 +9,6 @@ var allLists = [monArray, tuesArray, wedArray, thursArray, friArray];
 window.onload = loadTasks;
 
 function loadTasks() {
-  
-  console.log(monArray.name);
 
   chrome.storage.sync.get("monlist", function(data) {
     monArray.tasks = data.monlist;
@@ -39,6 +37,7 @@ function loadTasks() {
   });
 
   loadColours();
+  generateCloseButton();
 
 }
 
@@ -54,26 +53,6 @@ for (let i = 0; i < allLists.length; i++) {
   addToList(allLists[i]); // allLists is an array of ToDoList classes
 }
 
-function loadColours() {
-  var max = colours.length;
-  // generate random palette
-  var randomIndex = Math.floor(Math.random() * (max + 1));
-  for (let i = 0; i < allLists.length; i++) {
-    document.getElementById(allLists[i].boxID).style.backgroundColor =
-    '#' + colours[randomIndex][i];
-  }
-
-}
-
-// Create a "close" button and append it to each list item
-var myNodelist = document.getElementsByTagName("LI");
-for (let i = 0; i < myNodelist.length; i++) {
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  myNodelist[i].appendChild(span);
-}
 
 
 // strikethrough the text when list item is clicked
@@ -138,20 +117,12 @@ function addToList(dayOfWeekToDoList) {
 
 // Create a new list item when clicking on the enter key
 function newElement(dayOfWeekToDoList) {
-  var li = document.createElement("li");
   var inputValue = document.getElementById(dayOfWeekToDoList.inputID).value;
-  var t = document.createTextNode(inputValue);
-  var text = document.createElement("div");
-  text.className = "listText";
-  text.appendChild(t);
-  li.appendChild(text);
-
   var task = new Task(inputValue);
 
   if (inputValue !== '')
   {
     console.log(dayOfWeekToDoList.name);
-    document.getElementById(dayOfWeekToDoList.name).appendChild(li);
     
     if (dayOfWeekToDoList.tasks != undefined) {
       dayOfWeekToDoList.tasks.push(task);
@@ -160,15 +131,9 @@ function newElement(dayOfWeekToDoList) {
       dayOfWeekToDoList.tasks = [task];
     }
   }
-  document.getElementById(dayOfWeekToDoList.inputID).value = "";
 
   updateAdd(dayOfWeekToDoList.tasks, dayOfWeekToDoList.name);
-
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
+  newElementView(dayOfWeekToDoList)
 
   strikethroughTask();
   checkIfClose();
@@ -176,25 +141,7 @@ function newElement(dayOfWeekToDoList) {
 
 // display list elements after loading from chrome.storage
 function newElementfromStorage(theUL, inputTask) {
-  var li = document.createElement("li");
-  var t = document.createTextNode(inputTask.taskDescription);
-
-  var text = document.createElement("div");
-  text.className = "listText";
-  text.appendChild(t);
-  li.appendChild(text);
-  
-  document.getElementById(theUL).appendChild(li);
-
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
-
-  if (inputTask.strikethrough) {
-    li.classList.toggle('checked');
-  }
+  newElementfromStorageView(theUL, inputTask);
 
   strikethroughTask();
   checkIfClose();
@@ -205,8 +152,10 @@ function checkIfClose() {
   var close = document.getElementsByClassName("close");
   for (let i = 0; i < close.length; i++) {
     close[i].onclick = function() {
+
       var div = this.parentElement;
-      div.style.display = "none";
+      checkIfCloseView(div);
+
       var thingToRemove = div.textContent.substring(0, div.textContent.length-1);
       var dayID = div.parentElement.id;
       var dayArray;
