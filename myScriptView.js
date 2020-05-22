@@ -3,6 +3,7 @@ function loadColours() {
     var max = colours.length;
     // generate random palette
     var randomIndex = Math.floor(Math.random() * (max + 1));
+    console.log("hex colour palette: " + colours[randomIndex]);
     for (let i = 0; i < allLists.length; i++) {
         document.getElementById(allLists[i].boxID).style.backgroundColor =
             '#' + colours[randomIndex][i];

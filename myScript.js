@@ -12,27 +12,22 @@ function loadTasks() {
 
   chrome.storage.sync.get("monlist", function(data) {
     monArray.tasks = data.monlist;
-    console.log("Monday loading storage: " + data.monlist);
     reload("monUL", data.monlist); //storing the storage value in a variable and passing to reload function
   });
   chrome.storage.sync.get("tueslist", function(data) {
     tuesArray.tasks = data.tueslist;
-    console.log("Tuesday: " + data.tueslist);
     reload("tuesUL", data.tueslist); //storing the storage value in a variable and passing to reload function
   });
   chrome.storage.sync.get("wedlist", function(data) {
     wedArray.tasks = data.wedlist;
-    console.log("Wednesday: " + data.wedlist);
     reload("wedUL", data.wedlist); //storing the storage value in a variable and passing to reload function
   });
   chrome.storage.sync.get("thurslist", function(data) {
     thursArray.tasks = data.thurslist;
-    console.log("Thursday: " + data.thurslist);
     reload("thursUL", data.thurslist); //storing the storage value in a variable and passing to reload function
   });
   chrome.storage.sync.get("frilist", function(data) {
     friArray.tasks = data.frilist;
-    console.log("Friday: " + data.frilist);
     reload("friUL", data.frilist); //storing the storage value in a variable and passing to reload function
   });
 
@@ -95,7 +90,6 @@ function strikethroughTask() {
 // add input text to the to-do list
 function addToList(dayOfWeekToDoList) {
 
-  console.log("addToList");
   try {
     document.getElementById(dayOfWeekToDoList.inputID).addEventListener("keydown", function(e) // fix if null
     {
@@ -190,7 +184,6 @@ function checkIfClose() {
 }
 
 function reload(theUL, previousToDos) {
-  console.log(theUL);
   if (previousToDos != undefined) {
     for (let i = 0; i < previousToDos.length; i++) {
       newElementfromStorage(theUL, previousToDos[i]);
@@ -220,7 +213,6 @@ function updateAdd(array, key) {
     chrome.storage.sync.set({"frilist": array}, function() {});
   }
 
-  console.log("stored " + array + " in " + key);
   //then call the set to update with modified value
 
 }
